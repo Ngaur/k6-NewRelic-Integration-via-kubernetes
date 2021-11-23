@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: newrelic-statsd
+  labels:
+    app: newrelic-statsd
+spec:
+  selector:
+    matchLabels:
+      app: newrelic-statsd
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: newrelic-statsd
+    spec:
+      volumes:
+        - name: newrelic-vol
+          configMap:
+            name: nr-map
+      containers:
+      - name: newrelic-statsd
+        image: newrelic/nri-statsd:latest
+        ports:
+        - containerPort: 8125
+        volumeMounts:
+          - name: newrelic-vol
+            mountPath: /etc/opt/newrelic
+        env:
+        - name: NR_ACCOUNT_ID
+          value: "<newRelic-accountid>"
+        - name: NR_API_KEY
+          value: "newRelic-apiKey"
+        - name: NR_LOG_METRICS
+          value: "true"

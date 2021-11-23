@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nr-map
+data:
+  nri-statsd.toml: |
+    backends='newrelic'
+    flush-interval='10s'
+    statser-type='null'
+    log-raw-metric='true'
+
+    [newrelic]
+    # flush types supported: metrics,  insights, infra
+    flush-type = 'metrics'
+    transport = 'default'
+    # newrelic event address
+    address = "https://collector.newrelic.com/v1/accounts/<newRelic-accountid>/events"
+    # newrelic metric api address
+    address-metrics = "https://metric-api.newrelic.com/metric/v1"
+    api-key = '<newrelic api key>'
