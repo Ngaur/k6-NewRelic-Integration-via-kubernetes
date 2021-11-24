@@ -1,0 +1,19 @@
+apiVersion: k6.io/v1alpha1
+kind: K6
+metadata:
+  name: loadtestengine
+spec:
+  runner:
+    env:
+    - name: K6_STATSD_ADDR
+      # name of the new relic statsD service exposed in cluster.
+      value: newrelic-statsd-svc:80
+  parallelism: 2
+  script: 
+    volumeClaim:
+      name: loadtest-claim
+      file: loadtest.js
+  separate: false
+  arguments: "--out statsd" 
+  scuttle:
+    enabled: "false"
